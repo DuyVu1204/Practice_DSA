@@ -20,8 +20,8 @@ void push(Stack& s, int key);
 int pop(Stack& s);
 int size(Stack s);
 bool isEmpty(Stack s);
-void clearStack(Stack& s);//Add stack free function to avoid duplication
 void printStack(Stack& s, ofstream& outfile);
+void clearStack(Stack& s);//Add stack free function to avoid duplication
 
 Stack* initializeStack()
 {
@@ -91,13 +91,6 @@ void disPlay(Stack s)
     }
 }
 
-void clearStack(Stack& s) {
-    while (!isEmpty(s))
-    {
-        pop(s);
-    }
-}
-
 void printStack(Stack& s, ofstream& outfile){
     Stack* v=nullptr;
     v=initializeStack();
@@ -117,6 +110,14 @@ void printStack(Stack& s, ofstream& outfile){
     clearStack(*v);
     delete v;
 }
+
+void clearStack(Stack& s) {
+    while (!isEmpty(s))
+    {
+        pop(s);
+    }
+}
+
 
 int main()
 {
