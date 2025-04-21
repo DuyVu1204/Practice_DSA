@@ -166,11 +166,19 @@ int main()
                     outfile << "EMPTY" << endl;
                 else
                 {
+                    Stack* v = nullptr;//create new stack to save the value in reverse and save to output as requested
+                    v = initializeStack();
                     NODE* temp = s->top;
                     while (temp != nullptr)
                     {
-                        outfile << temp->key << " ";
+                        push(*v, temp->key);
                         temp = temp->p_next;
+                    }
+                    NODE* reverse = v->top;//put data into output
+                    while (reverse != nullptr)
+                    {
+                        outfile << reverse->key << " ";
+                        reverse = reverse->p_next;
                     }
                     outfile << endl;
                 }
