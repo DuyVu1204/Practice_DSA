@@ -117,10 +117,7 @@ int main() {
         {
             if (q != nullptr)
             {
-                while (!isEmpty(*q))
-                {
-                    dequeue(*q);
-                }
+                clearQueue(*q);
                 delete q;
             }
             q = initializeQueue();
