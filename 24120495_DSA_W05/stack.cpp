@@ -8,29 +8,30 @@ using namespace std;
 struct NODE
 {
     int key;
-    NODE *p_next;
+    NODE* p_next;
 };
 struct Stack
 {
-    NODE *top;
+    NODE* top;
 };
 
-Stack *initializeStack();
-void push(Stack &s, int key);
-int pop(Stack &s);
+Stack* initializeStack();
+void push(Stack& s, int key);
+int pop(Stack& s);
 int size(Stack s);
 bool isEmpty(Stack s);
+void clearStack(Stack& s);//Add stack free function to avoid duplication
 
-Stack *initializeStack()
+Stack* initializeStack()
 {
-    Stack *s = new Stack();
+    Stack* s = new Stack();
     s->top = nullptr;
     return s;
 }
 
-void push(Stack &s, int key)
+void push(Stack& s, int key)
 {
-    NODE *newNode = new NODE();
+    NODE* newNode = new NODE();
     newNode->key = key;
     newNode->p_next = nullptr;
     if (s.top == nullptr)
@@ -44,13 +45,13 @@ void push(Stack &s, int key)
     }
 }
 
-int pop(Stack &s)
+int pop(Stack& s)
 {
-    if (s.top==nullptr)
+    if (s.top == nullptr)
     {
         return -1;
     }
-    NODE *temp = s.top;
+    NODE* temp = s.top;
     int x = temp->key;
     s.top = s.top->p_next;
     delete temp;
@@ -61,7 +62,7 @@ int size(Stack s)
 {
     if (s.top == nullptr)
         return 0;
-    NODE *temp = s.top;
+    NODE* temp = s.top;
     int count = 0;
     while (temp != nullptr)
     {
@@ -81,91 +82,118 @@ bool isEmpty(Stack s)
 
 void disPlay(Stack s)
 {
-    NODE* temp=s.top;
+    NODE* temp = s.top;
     while (temp != nullptr)
     {
-        cout << temp->key << " ";   
-        temp=temp->p_next;
+        cout << temp->key << " ";
+        temp = temp->p_next;
     }
 }
 
+void clearStack(Stack& s) {
+    while (!isEmpty(s))
+    {
+        pop(s);
+    }
+}
 
 int main()
 {
-    Stack *s;
+    Stack* s = nullptr;
+    s=initializeStack();
     ifstream file("input.txt");
-        if (!file)
-        cout<<"Error file!"<<endl;
-    ofstream outfile("output.txt"); 
-        if(!outfile)
-        cout<<"Error file!"<<endl;
+    if (!file)
+    {
+        cout << "Error open file!" << endl;
+        return 1;
+    }
+    ofstream outfile("output.txt");
+    if (!outfile)
+    {
+        cout << "Error file!" << endl;
+        return 1;
+    }
     string line;
     while (getline(file, line))
     {
         stringstream ss(line);
         string call;
-        ss>>call;
-        if (line.compare("init")==0)
+        ss >> call;
+        if (line.compare("init") == 0)
         {
-            s=initializeStack();
-            outfile<<"EMPTY"<<endl;
+            if (s!=nullptr)
+            {
+                while (!isEmpty(*s))
+                {
+                    pop(*s);
+                }
+                delete s;
+            }
+            s = initializeStack();
+            outfile << "EMPTY" << endl;
         }
-        else if (call=="push")
+        else if (call == "push")
         {
             int x;
-            ss>>x;
+            ss >> x;
             push(*s, x);
-            Stack* v=nullptr;
-            v=initializeStack();
-            NODE* temp=s->top;
-                    while (temp!=nullptr)
-                    {
-                      push(*v,temp->key);
-                      temp=temp->p_next;
-                    }
-            NODE* reverse=v->top;
-                   while (reverse!=nullptr)
-                   {
-                      outfile<<reverse->key<<" ";
-                      reverse=reverse->p_next;
-                   }
-                   outfile<<endl;
+            Stack* v = nullptr;//create new stack to save the value in reverse and save to output as requested
+            v = initializeStack();
+            NODE* temp = s->top;
+            while (temp != nullptr)
+            {
+                push(*v, temp->key);
+                temp = temp->p_next;
+            }
+            NODE* reverse = v->top;//put data into output
+            while (reverse != nullptr)
+            {
+                outfile << reverse->key << " ";
+                reverse = reverse->p_next;
+            }
+            outfile << endl;
         }
-        else if (call=="pop")
+        else if (call == "pop")
         {
             if (isEmpty(*s))
             {
-                outfile<<"EMPTY"<<endl;             
+                outfile << "EMPTY" << endl;
             }
             else
             {
                 pop(*s);
                 if (isEmpty(*s))
-                outfile<<"EMPTY"<<endl;
+                    outfile << "EMPTY" << endl;
                 else
                 {
-                    NODE* temp=s->top;
-                    while (temp!=nullptr)
+                    NODE* temp = s->top;
+                    while (temp != nullptr)
                     {
-                      outfile<<temp->key<<" ";
-                      temp=temp->p_next;
+                        outfile << temp->key << " ";
+                        temp = temp->p_next;
                     }
-                    outfile<<endl;
+                    outfile << endl;
                 }
             }
         }
-        else if (call=="size")
+        else if (call == "size")
         {
-            cout<<size(*s)<<endl;
+            outfile << size(*s) << endl;
         }
-        else if (call=="isEmpty")
+        else if (call == "isEmpty")
         {
-            if (isEmpty(*s))
-            outfile<<"True"<<endl;
-            else outfile<<"False"<<endl;
+            if (!isEmpty(*s))
+                outfile << "FALSE" << endl;
+            else 
+                outfile << "TRUE" << endl;
         }
     }
     file.close();
     outfile.close();
+    if (s != nullptr)//free up memory
+    {
+        clearStack(*s);
+        delete s;
+    }
     return 0;
 }
