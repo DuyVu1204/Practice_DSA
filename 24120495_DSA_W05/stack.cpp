@@ -21,6 +21,7 @@ int pop(Stack& s);
 int size(Stack s);
 bool isEmpty(Stack s);
 void clearStack(Stack& s);//Add stack free function to avoid duplication
+void printStack(Stack& s, ofstream& outfile);
 
 Stack* initializeStack()
 {
@@ -97,6 +98,26 @@ void clearStack(Stack& s) {
     }
 }
 
+void printStack(Stack& s, ofstream& outfile){
+    Stack* v=nullptr;
+    v=initializeStack();
+    NODE* temp=s.top;
+    while (temp!=nullptr)
+    {
+        push(*v, temp->key);
+        temp=temp->p_next;
+    }
+    NODE* reverse = v->top;//put data into output
+    while (reverse != nullptr)
+    {
+        outfile << reverse->key << " ";
+        reverse = reverse->p_next;
+    }
+    outfile << endl;
+    clearStack(*v);
+    delete v;
+}
+
 int main()
 {
     Stack* s = nullptr;
@@ -119,14 +140,11 @@ int main()
         stringstream ss(line);
         string call;
         ss >> call;
-        if (line.compare("init") == 0)
+        if (call=="init")
         {
             if (s!=nullptr)
             {
-                while (!isEmpty(*s))
-                {
-                    pop(*s);
-                }
+                clearStack(*s);
                 delete s;
             }
             s = initializeStack();
@@ -137,21 +155,7 @@ int main()
             int x;
             ss >> x;
             push(*s, x);
-            Stack* v = nullptr;//create new stack to save the value in reverse and save to output as requested
-            v = initializeStack();
-            NODE* temp = s->top;
-            while (temp != nullptr)
-            {
-                push(*v, temp->key);
-                temp = temp->p_next;
-            }
-            NODE* reverse = v->top;//put data into output
-            while (reverse != nullptr)
-            {
-                outfile << reverse->key << " ";
-                reverse = reverse->p_next;
-            }
-            outfile << endl;
+            printStack(*s,outfile);
         }
         else if (call == "pop")
         {
@@ -166,21 +170,7 @@ int main()
                     outfile << "EMPTY" << endl;
                 else
                 {
-                    Stack* v = nullptr;//create new stack to save the value in reverse and save to output as requested
-                    v = initializeStack();
-                    NODE* temp = s->top;
-                    while (temp != nullptr)
-                    {
-                        push(*v, temp->key);
-                        temp = temp->p_next;
-                    }
-                    NODE* reverse = v->top;//put data into output
-                    while (reverse != nullptr)
-                    {
-                        outfile << reverse->key << " ";
-                        reverse = reverse->p_next;
-                    }
-                    outfile << endl;
+                   printStack(*s, outfile);
                 }
             }
         }
