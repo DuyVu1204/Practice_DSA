@@ -85,7 +85,7 @@ vector<vector<int>> convertListToMatrix(const string& filename)
         stringstream ss(line);
         int num;
         ss >> num;
-        for (int j = 0; j < num; j++) 
+        for (int j = 0; j < num; j++)
         {
             int x;
             ss >> x;
@@ -127,7 +127,7 @@ int countEdges(const vector<vector<int>>& adjMatrix)
 }
 
 bool checkNolink(const vector<vector<int>>& adjMatrix, int v) {
-    for (int i = 0; i < adjMatrix.size(); i++) 
+    for (int i = 0; i < adjMatrix.size(); i++)
     {
         if (adjMatrix[v][i] != 0 || adjMatrix[i][v] != 0)// Check if that vertex has any edges
             return false;
@@ -139,7 +139,7 @@ vector<int> getIsolatedVertices(const vector<vector<int>>& adjMatrix) {
     vector<int> a;
     for (int i = 0; i < adjMatrix.size(); i++)
     {
-       // Iterate over all vertices of the graph using the checkNolink function to add up the count variable.
+        // Iterate over all vertices of the graph using the checkNolink function to add up the count variable.
         if (checkNolink(adjMatrix, i))
         {
             a.push_back(i);
@@ -261,7 +261,7 @@ vector<vector<int>> convertToUndirectedGraph(const vector<vector<int>>& adjMatri
     {
         for (int j = 0; j < n; j++)
         {
-            if (adjMatrix[i][j] !=0)// if that cell is not 0
+            if (adjMatrix[i][j] != 0)// if that cell is not 0
             {
                 // Set the values ​​in those cells symmetrically across the main diagonal to 1.
                 copyMatrix[i][j] = 1;
@@ -284,7 +284,7 @@ vector<vector<int>> getComplementGraph(const vector<vector<int>>& adjMatrix) {
                 if (adjMatrix[i][j] != 0)
                 {
                     complementMatrix[i][j] = 0;// Set cells with non-zero values ​​to 0 to make adjacent cells non-adjacent.
-                }           
+                }
             }
             else
             {
@@ -303,18 +303,18 @@ bool isEuler(const vector<vector<int>>& adjMatrix) {
 
     // Find the first non-zero degree vertex to start BFS
     int start = -1;
-    for (int i = 0; i < n; ++i) 
+    for (int i = 0; i < n; ++i)
     {
         int deg = 0;
         for (int j = 0; j < n; ++j)
             deg += adjMatrix[i][j];
-        if (deg > 0) 
+        if (deg > 0)
         {
             start = i;
             break;
         }
     }
-    if (start == -1) 
+    if (start == -1)
         return true; // No edges
 
     // BFS
@@ -323,9 +323,9 @@ bool isEuler(const vector<vector<int>>& adjMatrix) {
     visited[start] = true;
     while (!q.empty()) {
         int u = q.front(); q.pop();
-        for (int v = 0; v < n; ++v) 
+        for (int v = 0; v < n; ++v)
         {
-            if ((adjMatrix[u][v] > 0 || (!isDirected(adjMatrix) && adjMatrix[v][u] > 0)) && !visited[v]) 
+            if ((adjMatrix[u][v] > 0 || (!isDirected(adjMatrix) && adjMatrix[v][u] > 0)) && !visited[v])
             {
                 visited[v] = true;
                 q.push(v);
@@ -334,7 +334,7 @@ bool isEuler(const vector<vector<int>>& adjMatrix) {
     }
 
     // Check that all vertices with degree > 0 have been visited.
-    for (int i = 0; i < n; ++i) 
+    for (int i = 0; i < n; ++i)
     {
         int deg = 0;
         for (int j = 0; j < n; ++j)
@@ -360,7 +360,7 @@ vector<int> findEulerCycle(const vector<vector<int>>& adjMatrix) {
         vector<int> in(n, 0), out(n, 0);
         for (int u = 0; u < n; ++u)
             for (int v = 0; v < n; ++v)
-                if (adjMatrix[u][v]) 
+                if (adjMatrix[u][v])
                 {
                     out[u] += adjMatrix[u][v];
                     in[v] += adjMatrix[u][v];
@@ -370,7 +370,7 @@ vector<int> findEulerCycle(const vector<vector<int>>& adjMatrix) {
     }
     else // Check the condition of an undirected graph
     {
-        for (int i = 0; i < n; ++i) 
+        for (int i = 0; i < n; ++i)
         {
             int deg = 0;
             for (int j = 0; j < n; ++j)
@@ -384,12 +384,12 @@ vector<int> findEulerCycle(const vector<vector<int>>& adjMatrix) {
 
     // Find the starting vertex with edge
     int start = -1;
-    for (int i = 0; i < n; ++i) 
+    for (int i = 0; i < n; ++i)
     {
         int deg = 0;
         for (int j = 0; j < n; ++j)
             deg += adjMatrix[i][j];
-        if (deg > 0) 
+        if (deg > 0)
         {
             start = i;
             break;
@@ -400,13 +400,13 @@ vector<int> findEulerCycle(const vector<vector<int>>& adjMatrix) {
     stack<int> s;
     s.push(start);
 
-    while (!s.empty()) 
+    while (!s.empty())
     {
         int u = s.top();
         bool found = false;
-        for (int v = 0; v < n; ++v) 
+        for (int v = 0; v < n; ++v)
         {
-            if (copyMatrix[u][v]) 
+            if (copyMatrix[u][v])
             {
                 s.push(v);
                 copyMatrix[u][v]--;
@@ -416,19 +416,22 @@ vector<int> findEulerCycle(const vector<vector<int>>& adjMatrix) {
                 break;
             }
         }
-        if (!found) 
+        if (!found)
         {
             cycle.push_back(u);
             s.pop();
         }
     }
 
+
+    reverse(cycle.begin(), cycle.end());
+
     return cycle;
 }
 
 void dfs(int v, const vector<vector<int>>& adjMatrix, vector<bool>& visited, vector<vector<int>>& treeMatrix) {
     int n = adjMatrix.size();
-    visited[v] = true; 
+    visited[v] = true;
     for (int i = 0; i < n; i++)
     {
         if (!visited[i] && adjMatrix[v][i] != 0)
@@ -443,7 +446,7 @@ void dfs(int v, const vector<vector<int>>& adjMatrix, vector<bool>& visited, vec
 vector<vector<int>> dfsSpanningTree(const vector<vector<int>>& adjMatrix, int start) {
     int n = adjMatrix.size();
     vector<bool> visited(n, false);
-    vector<vector<int>> treeMatrix(n, vector<int>(n,0));
+    vector<vector<int>> treeMatrix(n, vector<int>(n, 0));
     if (start < 0 || start >= n) return treeMatrix;
     dfs(start, adjMatrix, visited, treeMatrix);
     return treeMatrix;
@@ -476,7 +479,7 @@ void bfs(int v, const vector<vector<int>>& adjMatrix, vector <bool>& visited, ve
 vector<vector<int>> bfsSpanningTree(const vector<vector<int>>& adjMatrix, int start) {
     int n = adjMatrix.size();
     vector<bool> visited(n, false);
-    vector<vector<int>> treeMatrix(n, vector<int>(n,0));
+    vector<vector<int>> treeMatrix(n, vector<int>(n, 0));
     bfs(start, adjMatrix, visited, treeMatrix);
     return treeMatrix;
 }
@@ -535,7 +538,7 @@ vector<int> dijkstra(int start, int end, const vector<vector<int>>& adjMatrix) {
         int mind = INF;
         for (int j = 0; j < n; j++)
         {
-            if (!visited[j] && d[j]<mind)
+            if (!visited[j] && d[j] < mind)
             {
                 mind = d[j];
                 u = j;
@@ -619,4 +622,3 @@ vector<int> bellmanFord(int start, int end, const vector<vector<int>>& adjMatrix
     reverse(path.begin(), path.end());
     return path;
 }
-
