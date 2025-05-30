@@ -525,6 +525,17 @@ bool isConnected(int u, int v, const vector<vector<int>>& adjMatrix) {
 
 vector<int> dijkstra(int start, int end, const vector<vector<int>>& adjMatrix) {
     int n = adjMatrix.size();
+    vector<vector<int>> copyMatrix(n, vector<int>(n, INF));
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (adjMatrix[i][j] != 0)
+            {
+                copyMatrix[i][j] = adjMatrix[i][j];
+            }
+        }
+    }
     vector<int> d(n, INF);// distance
     vector<bool> visited(n, false);// visited vertex
     vector<int> parent(n, -1);// parent of vertex
@@ -550,11 +561,11 @@ vector<int> dijkstra(int start, int end, const vector<vector<int>>& adjMatrix) {
 
         for (int k = 0; k < n; k++)
         {
-            if (adjMatrix[u][k] != INF && !visited[k])
+            if (copyMatrix[u][k] != INF && !visited[k])
             {
-                if (d[u] + adjMatrix[u][k] < d[k])
+                if (d[u] + copyMatrix[u][k] < d[k])
                 {
-                    d[k] = d[u] + adjMatrix[u][k];
+                    d[k] = d[u] + copyMatrix[u][k];
                     parent[k] = u;
                 }
             }
@@ -578,6 +589,17 @@ vector<int> dijkstra(int start, int end, const vector<vector<int>>& adjMatrix) {
 
 vector<int> bellmanFord(int start, int end, const vector<vector<int>>& adjMatrix) {
     int n = adjMatrix.size();
+    vector<vector<int>> copyMatrix(n, vector<int>(n, INF));
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (adjMatrix[i][j] != 0)
+            {
+                copyMatrix[i][j] = adjMatrix[i][j];
+            }
+        }
+    }
     vector<int> d(n, INF);
     vector<int> parent(n, -1);
 
@@ -588,9 +610,9 @@ vector<int> bellmanFord(int start, int end, const vector<vector<int>>& adjMatrix
         {
             for (int k = 0; k < n; k++)
             {
-                if (adjMatrix[j][k] != INF && d[j] != INF && d[j] + adjMatrix[j][k] < d[k])
+                if (copyMatrix[j][k] != INF && d[j] != INF && d[j] + copyMatrix[j][k] < d[k])
                 {
-                    d[k] = d[j] + adjMatrix[j][k];
+                    d[k] = d[j] + copyMatrix[j][k];
                     parent[k] = j;
                 }
             }
@@ -601,7 +623,7 @@ vector<int> bellmanFord(int start, int end, const vector<vector<int>>& adjMatrix
     {
         for (int j = 0; j < n; j++)
         {
-            if (adjMatrix[i][j] != INF && d[i] != INF && d[i] + adjMatrix[i][j] < d[j])
+            if (copyMatrix[i][j] != INF && d[i] != INF && d[i] + copyMatrix[i][j] < d[j])
             {
                 return {};
             }
@@ -621,3 +643,4 @@ vector<int> bellmanFord(int start, int end, const vector<vector<int>>& adjMatrix
     reverse(path.begin(), path.end());
     return path;
 }
+
