@@ -423,7 +423,6 @@ vector<int> findEulerCycle(const vector<vector<int>>& adjMatrix) {
         }
     }
 
-
     reverse(cycle.begin(), cycle.end());
 
     return cycle;
